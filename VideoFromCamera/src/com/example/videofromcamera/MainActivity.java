@@ -21,16 +21,8 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 		Log.i("camera", "onCreate");
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		Log.i("camera", "orient ="
-				+ getResources().getConfiguration().orientation);
-		switch (getResources().getConfiguration().orientation) {
-		case 1:
-			setContentView(R.layout.main_portrait);
-			break;
-		case 2:
-			setContentView(R.layout.main_landscape);
-			break;
-		}
+		setContentView(R.layout.main);
+
 		initCamera();
 	}
 
@@ -69,10 +61,21 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 	private void startCamera(SurfaceHolder sh, int width, int height) {
 		Log.i("camera", "startCamera");
 		Camera.Parameters parameters = mCam.getParameters();
+		
 		for (Camera.Size s : parameters.getSupportedPreviewSizes()) {
 			parameters.setPreviewSize(s.width, s.height);
 			break;
 		}
+
+		switch (getResources().getConfiguration().orientation) {
+		case 1:
+			mCam.setDisplayOrientation(90);
+			break;
+		case 2:
+			mCam.setDisplayOrientation(0);
+			break;
+		}
+
 		mCam.setParameters(parameters);
 		try {
 			mCam.setPreviewDisplay(sh);
